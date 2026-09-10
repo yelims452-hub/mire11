@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>자신의 레시피를 세상으로</title>
+  <meta name="description" content="저장만 해두었던 레시피를 오늘의 한 끼로 만드는 레시피 공유 플랫폼" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Gowun+Dodum&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="자신의 레시피를 세상으로 홈">
+        <span class="brand-mark">R</span>
+        <span>Recipe to World</span>
+      </a>
+      <nav class="main-nav" aria-label="주요 메뉴">
+        <a href="#story">우리의 이야기</a>
+        <a href="#recipes">레시피 둘러보기</a>
+        <a href="#create">레시피 만들기</a>
+      </nav>
+      <button class="menu-button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+      <a class="login-link" href="#create">시작하기 <span>↗</span></a>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> 맛있는 순간을, 더 멀리</p>
+          <h1 id="hero-title">당신의 한 끼가<br /><em>누군가의 오늘</em>이<br />될 수 있어요.</h1>
+          <p class="hero-description">저장만 해두었던 레시피도, 오래 다듬어온 나만의 비법도.<br />사진과 영상으로 생생하게 기록하고 함께 나누세요.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#create">나의 레시피 공유하기 <span>→</span></a>
+            <a class="button button-text" href="#recipes">레시피 둘러보기 <span>↓</span></a>
+          </div>
+          <div class="hero-note">
+            <div class="avatars" aria-hidden="true"><i></i><i></i><i></i><b>+2k</b></div>
+            <p><strong>2,400명</strong>의 요리 친구가<br />오늘도 레시피를 나누고 있어요.</p>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="완성된 요리 사진">
+          <div class="visual-label label-top">오늘의 추천 <span>✦</span></div>
+          <div class="photo-stack">
+            <div class="pattern-card"></div>
+            <figure class="main-photo">
+              <img src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1100&q=85" alt="딸기와 크림이 올려진 팬케이크" />
+              <figcaption><span>Weekend brunch</span><b>오늘, 팬케이크 어때요?</b></figcaption>
+            </figure>
+          </div>
+          <div class="rating-card"><span class="star">★</span><b>4.9</b><small>맛있어요</small></div>
+          <div class="visual-label label-bottom">쉬운 레시피 · 15분 완성</div>
+        </div>
+      </section>
+
+      <section class="story-section" id="story" aria-labelledby="story-title">
+        <div class="story-intro">
+          <p class="section-kicker">WHY WE STARTED</p>
+          <h2 id="story-title">좋아하는 레시피는<br /><em>만들어질 때</em> 빛나니까.</h2>
+        </div>
+        <div class="story-text">
+          <p>SNS에서 발견한 근사한 레시피, 언젠가 만들겠다고 저장해두기만 한 적 있나요? 막상 요리하려고 하면 재료와 과정이 선명한 레시피를 다시 찾게 되곤 합니다.</p>
+          <p>우리는 누구나 요리의 즐거움을 쉽게 발견하고, 자신만의 맛을 세상과 나눌 수 있는 공간을 만들고 싶었습니다.</p>
+          <a href="#create">우리의 이야기 더 보기 <span>→</span></a>
+        </div>
+        <div class="quote-card">“요리는 거창하지 않아도<br />누군가의 하루를 따뜻하게 해요.”</div>
+      </section>
+
+      <section class="discover-section" id="recipes" aria-labelledby="discover-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">DISCOVER RECIPES</p>
+            <h2 id="discover-title">오늘 무엇을<br />만들어 볼까요?</h2>
+          </div>
+          <a class="round-link" href="#create" aria-label="모든 레시피 보기">전체 보기 <span>↗</span></a>
+        </div>
+        <div class="recipe-grid">
+          <article class="recipe-card featured-card">
+            <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=900&q=85" alt="아보카도 토스트" />
+            <div class="card-body"><p>BRUNCH · 10 MIN</p><h3>반숙란 아보카도 토스트</h3><span>by. 윤슬의 식탁</span></div>
+          </article>
+          <article class="recipe-card">
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85" alt="따뜻한 토마토 수프" />
+            <div class="card-body"><p>WARM MEAL · 25 MIN</p><h3>구운 토마토 크림 수프</h3><span>by. 느린 부엌</span></div>
+          </article>
+          <article class="recipe-card">
+            <img src="https://images.unsplash.com/photo-1461009683693-342af2f2d6ce?auto=format&fit=crop&w=900&q=85" alt="베리 음료" />
+            <div class="card-body"><p>DRINK · 5 MIN</p><h3>상큼한 베리 요거트 스무디</h3><span>by. 오후의 레시피</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="create-section" id="create" aria-labelledby="create-title">
+        <div class="create-art" aria-hidden="true">
+          <div class="circle circle-1"></div><div class="circle circle-2"></div><div class="circle circle-3"></div>
+          <span>✦</span><span>✳</span><span>✦</span>
+        </div>
+        <div class="create-copy">
+          <p class="section-kicker">MAKE IT YOURS</p>
+          <h2 id="create-title">나만의 맛을<br /><em>기록해 보세요.</em></h2>
+          <p>사진 한 장부터 조리 과정 영상까지. 처음 요리하는 사람도 따라 할 수 있는 다정한 레시피를 만들어 보세요.</p>
+          <ul>
+            <li><span>01</span> 과정마다 사진과 영상 추가</li>
+            <li><span>02</span> 재료와 팁을 한눈에 정리</li>
+            <li><span>03</span> 모두에게 레시피 공유</li>
+          </ul>
+          <button class="button button-primary publish-button">첫 레시피 작성하기 <span>→</span></button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand" href="#top"><span class="brand-mark">R</span><span>Recipe to World</span></a>
+      <p>당신의 레시피를 세상으로.</p>
+      <p>© 2026 Recipe to World</p>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
