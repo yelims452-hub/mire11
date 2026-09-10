@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>레시피 작성하기 · 자신의 레시피를 세상으로</title>
+  <title>레시피 추출 · 자신의 레시피를 세상으로</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Gowun+Dodum&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="create.css" />
+  <link rel="stylesheet" href="extract.css" />
 </head>
 <body>
   <div class="page-shell">
@@ -28,15 +29,32 @@
 
     <main class="create-page">
       <div class="create-page-heading">
-        <p class="section-kicker">SHARE YOUR RECIPE</p>
-        <h1>나만의 레시피를<br /><em>세상에 기록해요.</em></h1>
-        <p class="create-page-sub">사진이나 조리 영상을 곁들이면 다른 사람이 훨씬 쉽게 따라 만들 수 있어요.</p>
+        <p class="section-kicker">EXTRACT FROM A LINK</p>
+        <h1>링크 하나로<br /><em>레시피를 가져와요.</em></h1>
+        <p class="create-page-sub">유튜브 영상이나 블로그 글 주소를 넣으면, 내용을 분석해 재료·조리순서를 자동으로 채워드려요. 결과는 등록 전에 자유롭게 수정할 수 있어요.</p>
       </div>
 
-      <form id="recipe-form" class="recipe-form" novalidate>
+      <section class="form-block extract-input-block">
+        <label for="source-url">유튜브 또는 블로그 URL</label>
+        <div class="extract-input-row">
+          <input id="source-url" type="url" placeholder="https://www.youtube.com/watch?v=... 또는 블로그 글 주소" required />
+          <button type="button" id="analyze-btn" class="button button-primary">분석하기 <span>→</span></button>
+        </div>
+        <p class="field-hint" id="extract-status"></p>
+      </section>
+
+      <section class="form-block extract-manual-block" id="manual-paste-block">
+        <label for="manual-json">분석 결과 붙여넣기 <span class="hint-inline">(채팅에서 분석한 JSON을 여기에 붙여넣으면 아래 폼이 자동으로 채워져요)</span></label>
+        <textarea id="manual-json" rows="6" placeholder='{"recipe_name": "...", "category": "...", "tags": [...], "ingredients": [...], "instructions": [...], "tips": null, "source_url": "..."}'></textarea>
+        <button type="button" id="apply-json-btn" class="button button-text small">폼에 반영하기</button>
+      </section>
+
+      <form id="recipe-form" class="recipe-form" novalidate hidden>
+        <p class="extract-preview-label">✦ 아래 내용을 확인하고 필요한 부분을 수정한 뒤 등록해주세요.</p>
+
         <section class="form-block">
           <label for="title">레시피 이름 <span class="required">*</span></label>
-          <input id="title" name="title" type="text" placeholder="예: 반숙란 아보카도 토스트" required />
+          <input id="title" name="title" type="text" required />
 
           <div class="form-row">
             <div>
@@ -44,7 +62,7 @@
               <select id="category" name="category">
                 <option value="한식">한식</option>
                 <option value="일식">일식</option>
-                <option value="양식" selected>양식</option>
+                <option value="양식">양식</option>
                 <option value="중식">중식</option>
                 <option value="아시안">아시안</option>
                 <option value="베이킹/디저트">베이킹/디저트</option>
@@ -63,7 +81,7 @@
 
         <section class="form-block">
           <label>대표 사진 / 요리 과정 미디어</label>
-          <p class="field-hint">완성 사진, 과정 사진, 조리 영상을 자유롭게 올려보세요. (이미지·동영상, 여러 개 선택 가능)</p>
+          <p class="field-hint">필요하다면 사진이나 영상을 추가로 올려보세요.</p>
           <label class="media-drop" for="media-input">
             <input id="media-input" type="file" accept="image/*,video/*" multiple hidden />
             <span class="media-drop-icon">＋</span>
@@ -89,13 +107,16 @@
           <input id="tags" name="tags" type="text" placeholder="예: 자취요리, 초간단, 브런치" />
 
           <label for="tips">팁 / 주의사항</label>
-          <textarea id="tips" name="tips" rows="3" placeholder="더 맛있게 만드는 팁이 있다면 알려주세요."></textarea>
+          <textarea id="tips" name="tips" rows="3"></textarea>
+
+          <label for="source-url-final">출처 링크</label>
+          <input id="source-url-final" name="source_url" type="url" readonly />
         </section>
 
         <div id="form-message" class="form-message" role="status"></div>
 
         <div class="form-actions">
-          <button type="submit" class="button button-primary" id="submit-button">레시피 올리기 <span>→</span></button>
+          <button type="submit" class="button button-primary" id="submit-button">이 레시피 등록하기 <span>→</span></button>
         </div>
       </form>
     </main>
@@ -108,6 +129,6 @@
   </div>
   <script src="script.js"></script>
   <script type="module" src="supabase.js"></script>
-  <script type="module" src="create.js"></script>
+  <script type="module" src="extract.js"></script>
 </body>
 </html>
