@@ -1,0 +1,61 @@
+[
+  {
+    "recipe_name": "반숙란 아보카도 토스트",
+    "category": "양식",
+    "tags": ["아보카도", "브런치", "초간단"],
+    "image": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=900&q=85",
+    "author": "윤슬의 식탁",
+    "duration": "10 MIN",
+    "ingredients": [
+      { "name": "아보카도", "amount": "1개" },
+      { "name": "달걀", "amount": "1개" },
+      { "name": "식빵", "amount": "1장" }
+    ],
+    "instructions": [
+      "식빵을 굽는다.",
+      "아보카도를 으깨어 빵 위에 올린다.",
+      "반숙란을 올려 마무리한다."
+    ],
+    "tips": null,
+    "source_url": null
+  },
+  {
+    "recipe_name": "구운 토마토 크림 수프",
+    "category": "양식",
+    "tags": ["토마토", "수프", "따뜻한한끼"],
+    "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85",
+    "author": "느린 부엌",
+    "duration": "25 MIN",
+    "ingredients": [
+      { "name": "토마토", "amount": "4개" },
+      { "name": "생크림", "amount": "100ml" },
+      { "name": "양파", "amount": "1/2개" }
+    ],
+    "instructions": [
+      "토마토와 양파를 오븐에 굽는다.",
+      "믹서에 갈아 냄비에 옮긴다.",
+      "생크림을 넣고 끓인다."
+    ],
+    "tips": null,
+    "source_url": null
+  },
+  {
+    "recipe_name": "상큼한 베리 요거트 스무디",
+    "category": "베이킹/디저트",
+    "tags": ["베리", "스무디", "간단음료"],
+    "image": "https://images.unsplash.com/photo-1461009683693-342af2f2d6ce?auto=format&fit=crop&w=900&q=85",
+    "author": "오후의 레시피",
+    "duration": "5 MIN",
+    "ingredients": [
+      { "name": "냉동 베리", "amount": "1컵" },
+      { "name": "요거트", "amount": "1컵" },
+      { "name": "꿀", "amount": "1큰술" }
+    ],
+    "instructions": [
+      "모든 재료를 믹서에 넣는다.",
+      "부드럽게 갈아준다."
+    ],
+    "tips": null,
+    "source_url": null
+  }
+]
