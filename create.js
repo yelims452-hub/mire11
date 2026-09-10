@@ -7,6 +7,16 @@ const messageBox = document.getElementById('form-message');
 const submitButton = document.getElementById('submit-button');
 
 let mediaFiles = [];
+let currentUser = null;
+
+(async () => {
+  currentUser = await window.RecipeAuth?.getCurrentUser?.();
+  if (currentUser?.profile) {
+    const authorInput = document.getElementById('author');
+    authorInput.value = currentUser.profile.username;
+    authorInput.readOnly = true;
+  }
+})();
 
 function addIngredientRow(name = '', amount = '') {
   const row = document.createElement('div');
@@ -145,6 +155,7 @@ form.addEventListener('submit', async (e) => {
       category,
       duration: duration || null,
       author,
+      user_id: currentUser?.user?.id || null,
       tags: tagsRaw ? tagsRaw.split(',').map((t) => t.trim()).filter(Boolean) : [],
       ingredients,
       instructions,

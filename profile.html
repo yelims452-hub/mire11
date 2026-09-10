@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>레시피 상세 · 자신의 레시피를 세상으로</title>
+  <title>내 프로필 · 자신의 레시피를 세상으로</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Gowun+Dodum&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="feed.css" />
+  <link rel="stylesheet" href="create.css" />
+  <link rel="stylesheet" href="auth.css" />
 </head>
 <body>
   <div class="page-shell">
@@ -24,11 +25,11 @@
         <a href="extract.html">레시피 추출</a>
       </nav>
       <button class="menu-button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
-      <a class="login-link" href="login.html">로그인</a>
+      <a class="login-link" href="#" id="logout-link">로그아웃</a>
     </header>
 
-    <main class="recipe-detail" id="recipe-detail">
-      <p class="recipe-loading">레시피를 불러오는 중...</p>
+    <main class="auth-page" id="profile-main">
+      <p class="recipe-loading">프로필을 불러오는 중...</p>
     </main>
 
     <footer class="site-footer">
@@ -40,7 +41,6 @@
   <script src="script.js"></script>
   <script type="module" src="supabase.js"></script>
   <script type="module" src="auth.js"></script>
-  <script type="module" src="nav-auth.js"></script>
-  <script type="module" src="recipe-detail.js"></script>
+  <script type="module" src="profile.js"></script>
 </body>
 </html>

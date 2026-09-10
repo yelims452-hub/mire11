@@ -12,6 +12,11 @@ const manualJson = document.getElementById('manual-json');
 const applyJsonBtn = document.getElementById('apply-json-btn');
 
 let mediaFiles = [];
+let currentUser = null;
+
+(async () => {
+  currentUser = await window.RecipeAuth?.getCurrentUser?.();
+})();
 
 function addIngredientRow(name = '', amount = '') {
   const row = document.createElement('div');
@@ -95,6 +100,11 @@ function fillFormFromRecipeData(data) {
   document.getElementById('tags').value = (data.tags || []).join(', ');
   document.getElementById('tips').value = data.tips || '';
   document.getElementById('source-url-final').value = data.source_url || sourceUrlInput.value || '';
+  if (currentUser?.profile) {
+    const authorInput = document.getElementById('author');
+    authorInput.value = currentUser.profile.username;
+    authorInput.readOnly = true;
+  }
 
   ingredientList.innerHTML = '';
   (data.ingredients && data.ingredients.length ? data.ingredients : [{ name: '', amount: '' }])
@@ -200,6 +210,7 @@ form.addEventListener('submit', async (e) => {
       category,
       duration: duration || null,
       author,
+      user_id: currentUser?.user?.id || null,
       tags: tagsRaw ? tagsRaw.split(',').map((t) => t.trim()).filter(Boolean) : [],
       ingredients,
       instructions,
