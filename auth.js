@@ -58,7 +58,10 @@ async function signUp({ username, email, password, birthdate, bio }) {
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { username } },
+    options: {
+      data: { username },
+      emailRedirectTo: `${window.location.origin}/login.html`,
+    },
   });
   if (signUpError) {
     if (/already registered/i.test(signUpError.message)) {
