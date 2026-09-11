@@ -1,16 +1,15 @@
-// 아이디(username) 기반 로그인을 Supabase Auth 위에 구현한다.
-// Supabase Auth는 이메일 기반이라, username을 내부 도메인의 가짜 이메일로 변환해서 사용한다.
-// 주의: Supabase가 이메일 형식(TLD 등)을 검증하므로, 실제 존재하는 TLD 형태(.com)를 써야 한다.
-// 예: "yuri" -> "yuri@recipe-to-world-users.com"
-const FAKE_EMAIL_DOMAIN = 'recipe-to-world-users.com';
+// 아이디(username) 기반 로그인. 로그인 자체는 Supabase Auth 위에서 동작하되,
+// 계정은 반드시 "실제 이메일"로 생성해 Supabase가 진짜 확인 메일을 보내도록 한다.
+// (한 사람이 무한 계정을 만드는 것을 억제하기 위한 최소한의 검증 장치)
 const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,20}$/;
-
-function usernameToEmail(username) {
-  return `${username.toLowerCase()}@${FAKE_EMAIL_DOMAIN}`;
-}
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function isValidUsername(username) {
   return USERNAME_PATTERN.test(username);
+}
+
+function isValidEmail(email) {
+  return EMAIL_PATTERN.test(email);
 }
 
 // 아이디 중복 여부 확인 (profiles 테이블 조회)
@@ -29,15 +28,26 @@ async function checkUsernameAvailable(username) {
   return { available: !data, reason: null };
 }
 
-// 회원가입: Supabase Auth 계정 생성 + profiles row 생성
-async function signUp({ username, password, birthdate, bio }) {
+// 회원가입: 실제 이메일로 Supabase Auth 계정 생성(확인 메일 발송) + profiles row 생성.
+// 서버(/api/check-signup-limit)에 먼저 가입 속도 제한 통과 여부를 확인한다.
+async function signUp({ username, email, password, birthdate, bio }) {
   const supabase = await window.getSupabase?.();
   if (!supabase) throw new Error('Supabase가 연결되어 있지 않아요.');
   if (!isValidUsername(username)) {
     throw new Error('아이디는 영문/숫자/밑줄(_)로 3~20자여야 해요.');
   }
+  if (!isValidEmail(email)) {
+    throw new Error('올바른 이메일 주소를 입력해주세요.');
+  }
   if (!birthdate) {
     throw new Error('생년월일을 입력해주세요. (비밀번호 찾기 본인확인용으로 사용돼요)');
+  }
+
+  // 가입 속도 제한 체크 (같은 IP에서 짧은 시간 내 반복 가입 방지)
+  const limitRes = await fetch('/api/check-signup-limit', { method: 'POST' });
+  const limitData = await limitRes.json().catch(() => ({}));
+  if (!limitRes.ok) {
+    throw new Error(limitData.error || '지금은 가입할 수 없어요. 잠시 후 다시 시도해주세요.');
   }
 
   const { available } = await checkUsernameAvailable(username);
@@ -45,14 +55,14 @@ async function signUp({ username, password, birthdate, bio }) {
     throw new Error('이미 사용 중인 아이디예요.');
   }
 
-  const email = usernameToEmail(username);
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
+    options: { data: { username } },
   });
   if (signUpError) {
     if (/already registered/i.test(signUpError.message)) {
-      throw new Error('이미 사용 중인 아이디예요.');
+      throw new Error('이미 가입된 이메일이에요.');
     }
     throw signUpError;
   }
@@ -63,6 +73,7 @@ async function signUp({ username, password, birthdate, bio }) {
   const { error: profileError } = await supabase.from('profiles').insert({
     id: userId,
     username,
+    email,
     birthdate,
     bio: bio || null,
   });
@@ -89,13 +100,25 @@ async function resetPasswordWithBirthdate({ username, birthdate, newPassword }) 
   return data;
 }
 
-// 로그인: username -> 내부 이메일 변환 후 Supabase Auth 로그인
+// 로그인: username -> profiles에서 실제 이메일 조회 후 Supabase Auth 로그인
 async function signIn({ username, password }) {
   const supabase = await window.getSupabase?.();
   if (!supabase) throw new Error('Supabase가 연결되어 있지 않아요.');
-  const email = usernameToEmail(username);
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('email')
+    .ilike('username', username)
+    .maybeSingle();
+  if (profileError || !profile) {
+    throw new Error('아이디 또는 비밀번호가 올바르지 않아요.');
+  }
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email: profile.email, password });
   if (error) {
+    if (/email not confirmed/i.test(error.message)) {
+      throw new Error('이메일 인증이 아직 완료되지 않았어요. 받은 메일함을 확인해주세요.');
+    }
     throw new Error('아이디 또는 비밀번호가 올바르지 않아요.');
   }
   return data;
@@ -119,6 +142,7 @@ async function getCurrentUser() {
 
 window.RecipeAuth = {
   isValidUsername,
+  isValidEmail,
   checkUsernameAvailable,
   signUp,
   signIn,

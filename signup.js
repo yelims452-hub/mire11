@@ -39,6 +39,7 @@ form.addEventListener('submit', async (e) => {
   setMessage('', '');
 
   const username = usernameInput.value.trim();
+  const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
   const password2 = document.getElementById('password2').value;
   const birthdate = document.getElementById('birthdate').value;
@@ -46,6 +47,10 @@ form.addEventListener('submit', async (e) => {
 
   if (!window.RecipeAuth.isValidUsername(username)) {
     setMessage('아이디 형식을 확인해주세요.', 'error');
+    return;
+  }
+  if (!window.RecipeAuth.isValidEmail(email)) {
+    setMessage('올바른 이메일 주소를 입력해주세요.', 'error');
     return;
   }
   if (password.length < 6) {
@@ -61,9 +66,8 @@ form.addEventListener('submit', async (e) => {
   submitButton.textContent = '가입 처리 중...';
 
   try {
-    await window.RecipeAuth.signUp({ username, password, birthdate, bio });
-    setMessage('회원가입이 완료됐어요! 잠시 후 프로필로 이동합니다.', 'success');
-    setTimeout(() => { window.location.href = 'profile.html'; }, 1200);
+    await window.RecipeAuth.signUp({ username, email, password, birthdate, bio });
+    setMessage('확인 메일을 보냈어요! 메일의 링크를 누르면 가입이 완료돼요.', 'success');
   } catch (err) {
     setMessage(err.message || '회원가입 중 문제가 발생했어요.', 'error');
   } finally {
