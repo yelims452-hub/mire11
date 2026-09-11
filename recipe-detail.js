@@ -35,7 +35,7 @@ function commentFormTemplate(loggedInUsername) {
   `;
 }
 
-function renderDetail(recipe, { likeCount, liked, comments, loggedInUsername }) {
+function renderDetail(recipe, { likeCount, liked, comments, loggedInUsername, isOwner }) {
   const media = (recipe.media && recipe.media.length ? recipe.media : [recipe.image]).filter(Boolean);
   container.innerHTML = `
     <div class="rd-header">
@@ -44,7 +44,15 @@ function renderDetail(recipe, { likeCount, liked, comments, loggedInUsername }) 
       <div class="rd-meta">
         <span>by. ${escapeHtml(recipe.author || '익명의 요리사')}</span>
         ${recipe.created_at ? `<span>${new Date(recipe.created_at).toLocaleDateString('ko-KR')}</span>` : ''}
+        ${recipe.hidden ? '<span class="rd-hidden-badge">비공개(나에게만 보임)</span>' : ''}
       </div>
+      ${isOwner ? `
+        <div class="rd-owner-actions">
+          <a class="button button-text small" href="edit-recipe.html?id=${encodeURIComponent(recipe.id)}">수정하기</a>
+          <button type="button" class="button button-text small" id="toggle-hidden-btn">${recipe.hidden ? '공개로 전환' : '숨기기'}</button>
+          <button type="button" class="button button-text small danger" id="delete-recipe-btn">삭제하기</button>
+        </div>
+      ` : ''}
     </div>
 
     ${media.length ? `<div class="rd-media">${media.map((url) =>
@@ -76,6 +84,8 @@ function renderDetail(recipe, { likeCount, liked, comments, loggedInUsername }) 
     ${recipe.tips ? `<section class="rd-section"><h2>팁</h2><p class="rd-tips">${escapeHtml(recipe.tips)}</p></section>` : ''}
 
     ${recipe.tags?.length ? `<section class="rd-section"><h2>태그</h2><div class="rd-tags">${recipe.tags.map((t) => `<span>#${escapeHtml(t)}</span>`).join('')}</div></section>` : ''}
+
+    ${recipe.source_url ? `<section class="rd-section"><h2>출처</h2><a class="rd-source-link" href="${escapeHtml(recipe.source_url)}" target="_blank" rel="noopener noreferrer">🔗 ${escapeHtml(recipe.source_url)}</a></section>` : ''}
 
     <section class="rd-section">
       <h2>댓글 <span id="comment-count">${comments.length}</span></h2>
@@ -115,11 +125,16 @@ async function main() {
       container.innerHTML = '<p class="recipe-loading">레시피를 불러오지 못했어요.</p>';
       return;
     }
+    const isOwner = !!(currentUser?.user?.id && recipe.user_id === currentUser.user.id);
+    if (recipe.hidden && !isOwner) {
+      container.innerHTML = '<p class="recipe-loading">비공개 처리된 레시피예요.</p>';
+      return;
+    }
     const { count: likeCount } = await supabase.from('likes').select('*', { count: 'exact', head: true }).eq('recipe_id', recipeId);
     const { data: myLike } = await supabase.from('likes').select('id').eq('recipe_id', recipeId).eq('device_id', deviceId).maybeSingle();
     const { data: comments } = await supabase.from('comments').select('*').eq('recipe_id', recipeId).order('created_at', { ascending: true });
 
-    renderDetail(recipe, { likeCount: likeCount || 0, liked: !!myLike, comments: comments || [], loggedInUsername });
+    renderDetail(recipe, { likeCount: likeCount || 0, liked: !!myLike, comments: comments || [], loggedInUsername, isOwner });
 
     document.getElementById('like-btn').addEventListener('click', async () => {
       const btn = document.getElementById('like-btn');
@@ -131,6 +146,27 @@ async function main() {
       }
       main();
     });
+
+    if (isOwner) {
+      document.getElementById('toggle-hidden-btn')?.addEventListener('click', async () => {
+        const { error: updateError } = await supabase.from('recipes').update({ hidden: !recipe.hidden }).eq('id', recipeId);
+        if (updateError) {
+          alert('변경 중 문제가 발생했어요: ' + updateError.message);
+          return;
+        }
+        main();
+      });
+
+      document.getElementById('delete-recipe-btn')?.addEventListener('click', async () => {
+        if (!confirm('정말 이 레시피를 삭제할까요? 되돌릴 수 없어요.')) return;
+        const { error: deleteError } = await supabase.from('recipes').delete().eq('id', recipeId);
+        if (deleteError) {
+          alert('삭제 중 문제가 발생했어요: ' + deleteError.message);
+          return;
+        }
+        window.location.href = 'feed.html';
+      });
+    }
 
     document.getElementById('comment-form')?.addEventListener('submit', async (e) => {
       e.preventDefault();
