@@ -4,6 +4,18 @@
 .auth-switch{text-align:center;font-size:12.5px;color:var(--muted);margin-top:20px}
 .auth-switch a{color:var(--ink);font-weight:700;text-decoration:none;border-bottom:1px solid var(--ink)}
 .profile-view{background:#fff;border:1px solid var(--line);padding:32px 28px;display:flex;flex-direction:column;gap:16px}
+.profile-header-row{display:flex;align-items:center;gap:18px}
+.avatar-upload{position:relative;width:72px;height:72px;border-radius:50%;overflow:hidden;cursor:pointer;flex-shrink:0;display:block}
+.avatar-upload img{width:100%;height:100%;object-fit:cover;display:block;background:var(--paper)}
+.avatar-upload-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(23,58,53,.55);color:#fff;font:700 9px Manrope,sans-serif;opacity:0;transition:opacity .15s;text-align:center;padding:4px}
+.avatar-upload:hover .avatar-upload-hint{opacity:1}
+.my-recipe-list{display:flex;flex-direction:column;gap:12px}
+.my-recipe-item{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;border:1px solid var(--line);padding:10px 14px}
+.my-recipe-item img{width:56px;height:42px;object-fit:cover;background:var(--paper)}
+.my-recipe-info h3{font:400 14px 'DM Serif Display',serif;margin:0 0 3px}
+.my-recipe-info span{font-size:11px;color:var(--orange);font-weight:700}
+.my-recipe-actions{display:flex;gap:6px}
+.rd-hidden-badge{background:var(--orange);color:#fff;padding:2px 8px;font:700 9px Manrope,sans-serif;border-radius:10px;vertical-align:middle}
 .profile-view h2{font:400 26px 'DM Serif Display',serif;margin:0}
 .profile-view .p-username{color:var(--orange);font:700 12px Manrope,sans-serif;letter-spacing:.5px}
 .profile-view dl{display:grid;grid-template-columns:100px 1fr;gap:10px 14px;margin:0;font-size:13px}

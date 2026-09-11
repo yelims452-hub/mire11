@@ -22,6 +22,7 @@
         <a href="feed.html">레시피 둘러보기</a>
         <a href="create.html">레시피 만들기</a>
         <a href="extract.html">레시피 추출</a>
+        <a href="ranking.html">인기 랭킹</a>
       </nav>
       <button class="menu-button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
       <a class="login-link" href="login.html">로그인</a>
@@ -39,8 +40,8 @@
           </div>
           <p class="hero-extract-link"><a href="extract.html">🔗 유튜브·블로그 링크로 레시피 추출하기 해볼까요? <span>→</span></a></p>
           <div class="hero-note">
-            <div class="avatars" aria-hidden="true"><i></i><i></i><i></i><b>+2k</b></div>
-            <p><strong>2,400명</strong>의 요리 친구가<br />오늘도 레시피를 나누고 있어요.</p>
+            <div class="avatars" aria-hidden="true"><i></i><i></i><i></i><b id="user-count-badge">•••</b></div>
+            <p><strong id="user-count-text">집계 중</strong>의 요리 친구가<br />오늘도 레시피를 나누고 있어요.</p>
           </div>
         </div>
 
@@ -112,9 +113,9 @@
       <p>© 2026 Recipe to World</p>
     </footer>
   </div>
-  <script src="script.js"></script>
   <script type="module" src="supabase.js"></script>
   <script type="module" src="auth.js"></script>
   <script type="module" src="nav-auth.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

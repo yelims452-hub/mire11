@@ -40,3 +40,29 @@ async function loadHomeRecipes() {
 }
 
 loadHomeRecipes();
+
+// 실제 가입자 수(profiles 테이블 row 개수)를 불러와 표시한다.
+async function loadUserCount() {
+  const badge = document.getElementById('user-count-badge');
+  const text = document.getElementById('user-count-text');
+  if (!badge || !text) return;
+  try {
+    const supabase = await window.getSupabase?.();
+    if (!supabase) {
+      text.textContent = '많은';
+      badge.textContent = '★';
+      return;
+    }
+    const { count, error } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+    if (error) throw error;
+    const n = count || 0;
+    text.textContent = n.toLocaleString('ko-KR') + '명';
+    badge.textContent = n >= 1000 ? `+${Math.floor(n / 1000)}k` : `${n}`;
+  } catch (err) {
+    console.error('사용자 수 로드 실패:', err);
+    text.textContent = '여러';
+    badge.textContent = '★';
+  }
+}
+
+loadUserCount();
