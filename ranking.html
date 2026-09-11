@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>레시피 둘러보기 · 자신의 레시피를 세상으로</title>
+  <title>인기 레시피 랭킹 · 자신의 레시피를 세상으로</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Gowun+Dodum&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="feed.css" />
+  <link rel="stylesheet" href="ranking.css" />
 </head>
 <body>
   <div class="page-shell">
@@ -20,9 +21,9 @@
       <nav class="main-nav" aria-label="주요 메뉴">
         <a href="index.html#story">우리의 이야기</a>
         <a href="feed.html">레시피 둘러보기</a>
+        <a href="ranking.html">인기 랭킹</a>
         <a href="create.html">레시피 만들기</a>
         <a href="extract.html">레시피 추출</a>
-        <a href="ranking.html">인기 랭킹</a>
       </nav>
       <button class="menu-button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
       <a class="login-link" href="login.html">로그인</a>
@@ -31,25 +32,13 @@
     <main class="feed-page">
       <div class="feed-heading">
         <div>
-          <p class="section-kicker">DISCOVER RECIPES</p>
-          <h1>사람들이 나눈<br />오늘의 레시피</h1>
+          <p class="section-kicker">TOP RECIPES</p>
+          <h1>좋아요가 가장 많은<br />인기 레시피</h1>
         </div>
-        <a class="button button-primary" href="create.html">레시피 올리기 <span>→</span></a>
       </div>
 
-      <div class="category-filter" id="category-filter" role="tablist" aria-label="카테고리 필터">
-        <button type="button" class="cat-chip active" data-category="전체">전체</button>
-        <button type="button" class="cat-chip" data-category="한식">한식</button>
-        <button type="button" class="cat-chip" data-category="양식">양식</button>
-        <button type="button" class="cat-chip" data-category="일식">일식</button>
-        <button type="button" class="cat-chip" data-category="중식">중식</button>
-        <button type="button" class="cat-chip" data-category="아시안">아시안</button>
-        <button type="button" class="cat-chip" data-category="베이킹/디저트">베이킹/디저트</button>
-        <button type="button" class="cat-chip" data-category="기타">기타</button>
-      </div>
-
-      <div id="feed-grid" class="feed-grid" aria-live="polite">
-        <p class="recipe-loading">레시피를 불러오는 중...</p>
+      <div id="ranking-list" class="ranking-list" aria-live="polite">
+        <p class="recipe-loading">랭킹을 불러오는 중...</p>
       </div>
     </main>
 
@@ -63,6 +52,6 @@
   <script type="module" src="supabase.js"></script>
   <script type="module" src="auth.js"></script>
   <script type="module" src="nav-auth.js"></script>
-  <script type="module" src="feed.js"></script>
+  <script type="module" src="ranking.js"></script>
 </body>
 </html>
