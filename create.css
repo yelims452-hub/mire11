@@ -14,6 +14,7 @@ input[type="text"],select,textarea{font:500 13px 'Gowun Dodum',sans-serif;paddin
 textarea{resize:vertical}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--orange);outline-offset:1px}
 input[readonly]{background:var(--paper);color:var(--muted);cursor:not-allowed}
+.author-badge{display:inline-flex;align-items:center;background:var(--paper);padding:8px 14px;font:700 12px Manrope,sans-serif;color:var(--orange);width:fit-content;margin:0}
 .media-drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--line);padding:32px 16px;cursor:pointer;color:var(--muted);font-size:12px;transition:border-color .2s,color .2s}
 .media-drop:hover{border-color:var(--orange);color:var(--orange)}
 .media-drop-icon{font-size:26px;color:var(--orange)}

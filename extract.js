@@ -16,6 +16,15 @@ let currentUser = null;
 
 (async () => {
   currentUser = await window.RecipeAuth?.getCurrentUser?.();
+  const notice = document.getElementById('login-required-notice');
+  const inputSection = document.getElementById('extract-input-section');
+  if (!currentUser?.profile) {
+    notice.hidden = false;
+    inputSection.hidden = true;
+    return;
+  }
+  notice.hidden = true;
+  inputSection.hidden = false;
 })();
 
 function addIngredientRow(name = '', amount = '') {
@@ -101,9 +110,7 @@ function fillFormFromRecipeData(data) {
   document.getElementById('tips').value = data.tips || '';
   document.getElementById('source-url-final').value = data.source_url || sourceUrlInput.value || '';
   if (currentUser?.profile) {
-    const authorInput = document.getElementById('author');
-    authorInput.value = currentUser.profile.username;
-    authorInput.readOnly = true;
+    document.getElementById('author-display').textContent = '@' + currentUser.profile.username;
   }
 
   ingredientList.innerHTML = '';
@@ -178,7 +185,7 @@ form.addEventListener('submit', async (e) => {
   setMessage('', '');
 
   const title = document.getElementById('title').value.trim();
-  const author = document.getElementById('author').value.trim();
+  const author = currentUser?.profile?.username;
   const category = document.getElementById('category').value;
   const duration = document.getElementById('duration').value.trim();
   const tagsRaw = document.getElementById('tags').value.trim();
@@ -197,7 +204,7 @@ form.addEventListener('submit', async (e) => {
     .filter(Boolean);
 
   if (!title || !author) {
-    setMessage('레시피 이름과 작성자 닉네임을 입력해주세요.', 'error');
+    setMessage('레시피 이름을 입력해주세요. (로그인이 필요해요)', 'error');
     return;
   }
   if (ingredients.length === 0) {

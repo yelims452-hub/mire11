@@ -34,6 +34,16 @@
         <p class="create-page-sub">사진이나 조리 영상을 곁들이면 다른 사람이 훨씬 쉽게 따라 만들 수 있어요.</p>
       </div>
 
+      <div id="login-required-notice" class="auth-card" hidden>
+        <p class="section-kicker">LOGIN REQUIRED</p>
+        <h1>로그인이 필요해요.</h1>
+        <p class="create-page-sub">레시피를 올리려면 먼저 로그인해주세요. 작성자는 로그인한 아이디로 자동 표시돼요.</p>
+        <div class="form-actions" style="justify-content:flex-start;gap:14px">
+          <a class="button button-primary" href="login.html">로그인하기 <span>→</span></a>
+          <a class="button button-text" href="signup.html">회원가입하기 <span>→</span></a>
+        </div>
+      </div>
+
       <form id="recipe-form" class="recipe-form" novalidate>
         <section class="form-block">
           <label for="title">레시피 이름 <span class="required">*</span></label>
@@ -58,8 +68,8 @@
             </div>
           </div>
 
-          <label for="author">작성자 닉네임 <span class="required">*</span></label>
-          <input id="author" name="author" type="text" placeholder="예: 오후의 레시피" required />
+          <label>작성자</label>
+          <p class="field-hint author-badge" id="author-display">로딩 중...</p>
         </section>
 
         <section class="form-block">
