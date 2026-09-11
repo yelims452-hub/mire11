@@ -1,7 +1,8 @@
 // 아이디(username) 기반 로그인을 Supabase Auth 위에 구현한다.
 // Supabase Auth는 이메일 기반이라, username을 내부 도메인의 가짜 이메일로 변환해서 사용한다.
-// 예: "yuri" -> "yuri@users.recipe-to-world.local"
-const FAKE_EMAIL_DOMAIN = 'users.recipe-to-world.local';
+// 주의: Supabase가 이메일 형식(TLD 등)을 검증하므로, 실제 존재하는 TLD 형태(.com)를 써야 한다.
+// 예: "yuri" -> "yuri@recipe-to-world-users.com"
+const FAKE_EMAIL_DOMAIN = 'recipe-to-world-users.com';
 const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,20}$/;
 
 function usernameToEmail(username) {
