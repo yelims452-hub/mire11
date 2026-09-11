@@ -118,9 +118,9 @@ function fillFormFromRecipeData(data) {
   form.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// "분석하기" 버튼: 실제 자동 분석 API가 아직 없으므로, 채팅에서 분석한 결과를
-// 아래 "분석 결과 붙여넣기" 칸에 넣어 반영하도록 안내한다.
-analyzeBtn.addEventListener('click', () => {
+// "분석하기" 버튼: /api/extract 서버리스 함수를 호출해 Gemini가 직접 분석한다.
+// (실패시 수동 붙여넣기 칸으로 폴백 안내)
+analyzeBtn.addEventListener('click', async () => {
   const url = sourceUrlInput.value.trim();
   if (!url) {
     setStatus('먼저 유튜브 또는 블로그 URL을 입력해주세요.', 'error');
@@ -132,9 +132,30 @@ analyzeBtn.addEventListener('click', () => {
     setStatus('올바른 URL 형식이 아니에요.', 'error');
     return;
   }
-  setStatus('이 링크를 Timely 채팅창에 붙여넣고 "이 레시피 추출해줘"라고 요청해주세요. 분석 결과(JSON)를 아래 칸에 붙여넣으면 자동으로 폼이 채워져요.', 'success');
-  document.getElementById('manual-paste-block').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  manualJson.focus();
+
+  analyzeBtn.disabled = true;
+  const originalLabel = analyzeBtn.innerHTML;
+  analyzeBtn.innerHTML = '분석 중... <span>⏳</span>';
+  setStatus('AI가 링크를 읽고 레시피를 분석하고 있어요. 10~30초 정도 걸려요...', '');
+
+  try {
+    const res = await fetch('/api/extract', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '분석에 실패했어요.');
+    fillFormFromRecipeData(data);
+    setStatus('분석이 완료됐어요! 아래에서 내용을 확인하고 수정한 뒤 등록해주세요.', 'success');
+  } catch (err) {
+    console.error(err);
+    setStatus('자동 분석에 실패했어요: ' + err.message + ' 아래 "분석 결과 붙여넣기" 칸을 이용해주세요.', 'error');
+    document.getElementById('manual-paste-block').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } finally {
+    analyzeBtn.disabled = false;
+    analyzeBtn.innerHTML = originalLabel;
+  }
 });
 
 applyJsonBtn.addEventListener('click', () => {
