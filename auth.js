@@ -36,6 +36,9 @@ async function signUp({ username, password, birthdate, bio }) {
   if (!isValidUsername(username)) {
     throw new Error('아이디는 영문/숫자/밑줄(_)로 3~20자여야 해요.');
   }
+  if (!birthdate) {
+    throw new Error('생년월일을 입력해주세요. (비밀번호 찾기 본인확인용으로 사용돼요)');
+  }
 
   const { available } = await checkUsernameAvailable(username);
   if (available === false) {
@@ -60,7 +63,7 @@ async function signUp({ username, password, birthdate, bio }) {
   const { error: profileError } = await supabase.from('profiles').insert({
     id: userId,
     username,
-    birthdate: birthdate || null,
+    birthdate,
     bio: bio || null,
   });
   if (profileError) {
@@ -71,6 +74,19 @@ async function signUp({ username, password, birthdate, bio }) {
   }
 
   return signUpData;
+}
+
+// 비밀번호 찾기: 아이디 + 생년월일(본인확인) + 새 비밀번호를 서버 API(/api/reset-password)로 보낸다.
+// 서버가 service_role 키로 생년월일이 일치하는지 확인 후 비밀번호를 직접 재설정한다.
+async function resetPasswordWithBirthdate({ username, birthdate, newPassword }) {
+  const res = await fetch('/api/reset-password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, birthdate, newPassword }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || '비밀번호 재설정에 실패했어요.');
+  return data;
 }
 
 // 로그인: username -> 내부 이메일 변환 후 Supabase Auth 로그인
@@ -108,4 +124,5 @@ window.RecipeAuth = {
   signIn,
   signOut,
   getCurrentUser,
+  resetPasswordWithBirthdate,
 };
