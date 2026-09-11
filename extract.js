@@ -215,6 +215,10 @@ form.addEventListener('submit', async (e) => {
     setMessage('조리 순서를 최소 1단계 이상 입력해주세요.', 'error');
     return;
   }
+  if (!sourceUrl) {
+    setMessage('출처 링크가 비어있어요. 링크를 다시 분석하거나 붙여넣어 출처를 채워주세요.', 'error');
+    return;
+  }
 
   submitButton.disabled = true;
   submitButton.textContent = '등록 중...';
