@@ -63,3 +63,5 @@
 .comment-body time{font-size:10.5px;color:var(--muted);margin-left:8px}
 .comment-body p{font-size:13px;margin:4px 0 0;line-height:1.6}
 .comment-empty{color:var(--muted);font-size:12.5px}
+.comment-delete-btn{border:0;background:none;color:var(--orange);font:700 10.5px Manrope,sans-serif;cursor:pointer;margin-top:4px;padding:0}
+.comment-delete-btn:hover{text-decoration:underline}

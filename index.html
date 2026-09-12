@@ -33,7 +33,7 @@
         <div class="hero-copy">
           <p class="eyebrow"><span></span> 맛있는 순간을, 더 멀리</p>
           <h1 id="hero-title">당신의 한 끼가<br /><em>누군가의 오늘</em>이<br />될 수 있어요.</h1>
-          <p class="hero-description">저장만 해두었던 레시피도, 오래 다듬어온 나만의 비법도.<br />사진과 영상으로 생생하게 기록하고 함께 나누세요.</p>
+          <p class="hero-description" id="hero-description">저장만 해두었던 레시피도, 오래 다듬어온 나만의 비법도.<br />사진과 영상으로 생생하게 기록하고 함께 나누세요.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="create.html">나의 레시피 공유하기 <span>→</span></a>
             <a class="button button-text" href="feed.html">레시피 둘러보기 <span>↓</span></a>
@@ -65,11 +65,11 @@
           <h2 id="story-title">좋아하는 레시피는<br /><em>만들어질 때</em> 빛나니까.</h2>
         </div>
         <div class="story-text">
-          <p>SNS에서 발견한 근사한 레시피, 언젠가 만들겠다고 저장해두기만 한 적 있나요? 막상 요리하려고 하면 재료와 과정이 선명한 레시피를 다시 찾게 되곤 합니다.</p>
-          <p>우리는 누구나 요리의 즐거움을 쉽게 발견하고, 자신만의 맛을 세상과 나눌 수 있는 공간을 만들고 싶었습니다.</p>
+          <p id="story-text-1">SNS에서 발견한 근사한 레시피, 언젠가 만들겠다고 저장해두기만 한 적 있나요? 막상 요리하려고 하면 재료와 과정이 선명한 레시피를 다시 찾게 되곤 합니다.</p>
+          <p id="story-text-2">우리는 누구나 요리의 즐거움을 쉽게 발견하고, 자신만의 맛을 세상과 나눌 수 있는 공간을 만들고 싶었습니다.</p>
           <a href="feed.html">우리의 이야기 더 보기 <span>→</span></a>
         </div>
-        <div class="quote-card">“요리는 거창하지 않아도<br />누군가의 하루를 따뜻하게 해요.”</div>
+        <div class="quote-card" id="quote-card">“요리는 거창하지 않아도<br />누군가의 하루를 따뜻하게 해요.”</div>
       </section>
 
       <section class="discover-section" id="recipes" aria-labelledby="discover-title">
@@ -116,6 +116,7 @@
   <script type="module" src="supabase.js"></script>
   <script type="module" src="auth.js"></script>
   <script type="module" src="nav-auth.js"></script>
+  <script type="module" src="home-content.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

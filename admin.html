@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 페이지 · 자신의 레시피를 세상으로</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Gowun+Dodum&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="create.css" />
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="자신의 레시피를 세상으로 홈">
+        <span class="brand-mark">R</span>
+        <span>Recipe to World</span>
+      </a>
+      <nav class="main-nav" aria-label="주요 메뉴">
+        <a href="index.html#story">우리의 이야기</a>
+        <a href="feed.html">레시피 둘러보기</a>
+        <a href="create.html">레시피 만들기</a>
+        <a href="extract.html">레시피 추출</a>
+        <a href="ranking.html">인기 랭킹</a>
+      </nav>
+      <button class="menu-button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+      <a class="login-link" href="login.html">로그인</a>
+    </header>
+
+    <main class="create-page" id="admin-main">
+      <p class="recipe-loading">확인 중...</p>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand" href="index.html"><span class="brand-mark">R</span><span>Recipe to World</span></a>
+      <p>당신의 레시피를 세상으로.</p>
+      <p>© 2026 Recipe to World</p>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+  <script type="module" src="supabase.js"></script>
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="nav-auth.js"></script>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

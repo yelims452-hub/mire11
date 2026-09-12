@@ -35,8 +35,9 @@ function commentFormTemplate(loggedInUsername) {
   `;
 }
 
-function renderDetail(recipe, { likeCount, liked, comments, loggedInUsername, isOwner }) {
+function renderDetail(recipe, { likeCount, liked, comments, loggedInUsername, isOwner, isAdmin, currentUserId }) {
   const media = (recipe.media && recipe.media.length ? recipe.media : [recipe.image]).filter(Boolean);
+  const canManage = isOwner || isAdmin;
   container.innerHTML = `
     <div class="rd-header">
       <span class="rd-cat">${(recipe.category || '').toUpperCase()}${recipe.duration ? ' · ' + recipe.duration : ''}</span>
@@ -45,10 +46,11 @@ function renderDetail(recipe, { likeCount, liked, comments, loggedInUsername, is
         <span>by. ${escapeHtml(recipe.author || '익명의 요리사')}</span>
         ${recipe.created_at ? `<span>${new Date(recipe.created_at).toLocaleDateString('ko-KR')}</span>` : ''}
         ${recipe.hidden ? '<span class="rd-hidden-badge">비공개(나에게만 보임)</span>' : ''}
+        ${isAdmin && !isOwner ? '<span class="rd-hidden-badge">관리자 권한으로 관리 중</span>' : ''}
       </div>
-      ${isOwner ? `
+      ${canManage ? `
         <div class="rd-owner-actions">
-          <a class="button button-text small" href="edit-recipe.html?id=${encodeURIComponent(recipe.id)}">수정하기</a>
+          ${isOwner ? `<a class="button button-text small" href="edit-recipe.html?id=${encodeURIComponent(recipe.id)}">수정하기</a>` : ''}
           <button type="button" class="button button-text small" id="toggle-hidden-btn">${recipe.hidden ? '공개로 전환' : '숨기기'}</button>
           <button type="button" class="button button-text small danger" id="delete-recipe-btn">삭제하기</button>
         </div>
@@ -91,19 +93,21 @@ function renderDetail(recipe, { likeCount, liked, comments, loggedInUsername, is
       <h2>댓글 <span id="comment-count">${comments.length}</span></h2>
       ${commentFormTemplate(loggedInUsername)}
       <div id="comment-list" class="comment-list">
-        ${comments.length ? comments.map(commentTemplate).join('') : '<p class="comment-empty">아직 댓글이 없어요. 첫 댓글을 남겨보세요!</p>'}
+        ${comments.length ? comments.map((c) => commentTemplate(c, { isAdmin, currentUserId })).join('') : '<p class="comment-empty">아직 댓글이 없어요. 첫 댓글을 남겨보세요!</p>'}
       </div>
     </section>
   `;
 }
 
-function commentTemplate(c) {
+function commentTemplate(c, { isAdmin, currentUserId } = {}) {
+  const canDelete = isAdmin || (currentUserId && c.user_id === currentUserId);
   return `
-    <div class="comment-item">
+    <div class="comment-item" data-comment-id="${escapeHtml(c.id)}">
       <div class="comment-avatar">${escapeHtml((c.author || '?').slice(0, 1))}</div>
       <div class="comment-body">
         <b>${escapeHtml(c.author || '익명')}</b><time>${c.created_at ? new Date(c.created_at).toLocaleString('ko-KR') : ''}</time>
         <p>${escapeHtml(c.content)}</p>
+        ${canDelete ? `<button type="button" class="comment-delete-btn" data-comment-id="${escapeHtml(c.id)}">삭제</button>` : ''}
       </div>
     </div>
   `;
@@ -118,6 +122,8 @@ async function main() {
   const deviceId = getDeviceId();
   const currentUser = await window.RecipeAuth?.getCurrentUser?.();
   const loggedInUsername = currentUser?.profile?.username || null;
+  const isAdmin = !!currentUser?.profile?.is_admin;
+  const currentUserId = currentUser?.user?.id || null;
 
   if (supabase && !recipeId.startsWith('seed-') && !recipeId.startsWith('local-')) {
     const { data: recipe, error } = await supabase.from('recipes').select('*').eq('id', recipeId).single();
@@ -125,8 +131,8 @@ async function main() {
       container.innerHTML = '<p class="recipe-loading">레시피를 불러오지 못했어요.</p>';
       return;
     }
-    const isOwner = !!(currentUser?.user?.id && recipe.user_id === currentUser.user.id);
-    if (recipe.hidden && !isOwner) {
+    const isOwner = !!(currentUserId && recipe.user_id === currentUserId);
+    if (recipe.hidden && !isOwner && !isAdmin) {
       container.innerHTML = '<p class="recipe-loading">비공개 처리된 레시피예요.</p>';
       return;
     }
@@ -134,7 +140,15 @@ async function main() {
     const { data: myLike } = await supabase.from('likes').select('id').eq('recipe_id', recipeId).eq('device_id', deviceId).maybeSingle();
     const { data: comments } = await supabase.from('comments').select('*').eq('recipe_id', recipeId).order('created_at', { ascending: true });
 
-    renderDetail(recipe, { likeCount: likeCount || 0, liked: !!myLike, comments: comments || [], loggedInUsername, isOwner });
+    renderDetail(recipe, {
+      likeCount: likeCount || 0,
+      liked: !!myLike,
+      comments: comments || [],
+      loggedInUsername,
+      isOwner,
+      isAdmin,
+      currentUserId,
+    });
 
     document.getElementById('like-btn').addEventListener('click', async () => {
       const btn = document.getElementById('like-btn');
@@ -147,7 +161,7 @@ async function main() {
       main();
     });
 
-    if (isOwner) {
+    if (isOwner || isAdmin) {
       document.getElementById('toggle-hidden-btn')?.addEventListener('click', async () => {
         const { error: updateError } = await supabase.from('recipes').update({ hidden: !recipe.hidden }).eq('id', recipeId);
         if (updateError) {
@@ -158,7 +172,10 @@ async function main() {
       });
 
       document.getElementById('delete-recipe-btn')?.addEventListener('click', async () => {
-        if (!confirm('정말 이 레시피를 삭제할까요? 되돌릴 수 없어요.')) return;
+        const confirmMsg = isOwner
+          ? '정말 이 레시피를 삭제할까요? 되돌릴 수 없어요.'
+          : '관리자 권한으로 이 레시피를 삭제할까요? 되돌릴 수 없어요.';
+        if (!confirm(confirmMsg)) return;
         const { error: deleteError } = await supabase.from('recipes').delete().eq('id', recipeId);
         if (deleteError) {
           alert('삭제 중 문제가 발생했어요: ' + deleteError.message);
@@ -178,9 +195,22 @@ async function main() {
         author: loggedInUsername,
         content,
         device_id: deviceId,
-        user_id: currentUser.user.id,
+        user_id: currentUserId,
       });
       main();
+    });
+
+    document.querySelectorAll('.comment-delete-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        if (!confirm(isAdmin ? '관리자 권한으로 이 댓글을 삭제할까요?' : '이 댓글을 삭제할까요?')) return;
+        const commentId = btn.dataset.commentId;
+        const { error: deleteError } = await supabase.from('comments').delete().eq('id', commentId);
+        if (deleteError) {
+          alert('댓글 삭제 중 문제가 발생했어요: ' + deleteError.message);
+          return;
+        }
+        main();
+      });
     });
   } else {
     // Supabase 미연결: 로컬/시드 데이터 기반 표시, 좋아요·댓글은 로컬에만 저장
@@ -198,7 +228,7 @@ async function main() {
     const likeCount = (recipe.likes || 0) + (liked ? 1 : 0);
     const comments = JSON.parse(localStorage.getItem(commentsKey) || '[]');
 
-    renderDetail(recipe, { likeCount, liked, comments, loggedInUsername });
+    renderDetail(recipe, { likeCount, liked, comments, loggedInUsername, isOwner: false, isAdmin, currentUserId });
 
     document.getElementById('like-btn').addEventListener('click', () => {
       const nowLiked = localStorage.getItem(likesKey) === '1';
