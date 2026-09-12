@@ -31,7 +31,7 @@ async function checkUsernameAvailable(username) {
 // ─────────────────────────────────────────────────────────
 // 회원가입 플로우 (3단계, 이메일 OTP 인증 방식)
 // 1) 이름 + 생년월일 입력 (프론트 상태로만 보관)
-// 2) 이메일 입력 → Supabase Auth OTP(6자리 코드) 발송 → 코드 검증
+// 2) 이메일 입력 → Supabase Auth OTP(8자리 코드) 발송 → 코드 검증
 //    - signInWithOtp({ email })는 계정이 없으면 새로 만들고(shouldCreateUser 기본 true),
 //      있으면 기존 계정에 로그인 코드를 보낸다. verifyOtp가 성공하면 그 즉시
 //      로그인 세션이 생겨 auth.uid()가 채워진다(비밀번호는 아직 없는 상태).
@@ -39,7 +39,7 @@ async function checkUsernameAvailable(username) {
 //    서버 API(/api/create-profile)로 profiles row 생성
 // ─────────────────────────────────────────────────────────
 
-// 2단계: 이메일로 OTP(6자리) 발송
+// 2단계: 이메일로 OTP(8자리) 발송
 async function sendSignupOtp({ email }) {
   const supabase = await window.getSupabase?.();
   if (!supabase) throw new Error('Supabase가 연결되어 있지 않아요.');
@@ -63,7 +63,7 @@ async function sendSignupOtp({ email }) {
   }
 }
 
-// 2단계: 이메일로 받은 6자리 코드 검증. 성공하면 로그인 세션이 생긴다.
+// 2단계: 이메일로 받은 8자리 코드 검증. 성공하면 로그인 세션이 생긴다.
 async function verifySignupOtp({ email, token }) {
   const supabase = await window.getSupabase?.();
   if (!supabase) throw new Error('Supabase가 연결되어 있지 않아요.');

@@ -69,9 +69,9 @@
             <p class="field-hint" id="email-hint"></p>
 
             <div id="otp-block" hidden>
-              <label for="otp-code">인증번호 <span class="required">*</span> <span class="hint-inline">(이메일로 받은 숫자를 입력해주세요)</span></label>
+              <label for="otp-code">인증번호 <span class="required">*</span> <span class="hint-inline">(이메일로 받은 8자리 숫자를 입력해주세요)</span></label>
               <div class="otp-input-row">
-                <input id="otp-code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="숫자 입력" />
+                <input id="otp-code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="8자리 숫자" maxlength="8" />
                 <button type="button" class="button button-text small" id="resend-code-button">재전송</button>
               </div>
             </div>
