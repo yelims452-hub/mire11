@@ -34,14 +34,63 @@
         <p class="section-kicker">JOIN US</p>
         <h1>나만의 계정을<br /><em>만들어요.</em></h1>
 
-        <form id="signup-form" class="recipe-form" novalidate>
+        <!-- 회원가입 진행 단계 표시 -->
+        <div class="signup-steps" id="signup-steps" aria-label="회원가입 진행 단계">
+          <span class="signup-step is-active" data-step="1"><i>1</i>기본 정보</span>
+          <span class="signup-step" data-step="2"><i>2</i>이메일 인증</span>
+          <span class="signup-step" data-step="3"><i>3</i>아이디·비밀번호</span>
+        </div>
+
+        <!-- 1단계: 이름 + 생년월일 -->
+        <form id="step1-form" class="recipe-form" novalidate>
+          <section class="form-block">
+            <label for="name">이름 <span class="required">*</span></label>
+            <input id="name" type="text" placeholder="실명을 입력해주세요" required />
+
+            <label for="birthdate">생년월일 <span class="required">*</span> <span class="hint-inline">(비밀번호를 잊었을 때 본인확인용으로 사용돼요)</span></label>
+            <input id="birthdate" type="date" required />
+          </section>
+
+          <div id="step1-message" class="form-message" role="status"></div>
+
+          <div class="form-actions">
+            <button type="submit" class="button button-primary" id="step1-submit">다음 <span>→</span></button>
+          </div>
+        </form>
+
+        <!-- 2단계: 이메일 입력 + 인증번호 확인 -->
+        <form id="step2-form" class="recipe-form" novalidate hidden>
+          <section class="form-block">
+            <label for="email">이메일 <span class="required">*</span></label>
+            <div class="otp-input-row">
+              <input id="email" type="email" placeholder="example@email.com" required />
+              <button type="button" class="button button-text small" id="send-code-button">인증번호 받기</button>
+            </div>
+            <p class="field-hint" id="email-hint"></p>
+
+            <div id="otp-block" hidden>
+              <label for="otp-code">인증번호 <span class="required">*</span> <span class="hint-inline">(이메일로 받은 숫자를 입력해주세요)</span></label>
+              <div class="otp-input-row">
+                <input id="otp-code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="숫자 입력" />
+                <button type="button" class="button button-text small" id="resend-code-button">재전송</button>
+              </div>
+            </div>
+          </section>
+
+          <div id="step2-message" class="form-message" role="status"></div>
+
+          <div class="form-actions">
+            <button type="button" class="button button-text" id="step2-back">이전</button>
+            <button type="button" class="button button-primary" id="step2-submit" disabled>인증 확인 <span>→</span></button>
+          </div>
+        </form>
+
+        <!-- 3단계: 아이디 + 비밀번호 -->
+        <form id="step3-form" class="recipe-form" novalidate hidden>
           <section class="form-block">
             <label for="username">아이디 <span class="required">*</span></label>
             <input id="username" type="text" placeholder="영문/숫자/밑줄, 3~20자" required />
             <p class="field-hint" id="username-hint"></p>
-
-            <label for="email">이메일 <span class="required">*</span> <span class="hint-inline">(확인 메일이 발송돼요. 실제 사용 가능한 주소를 입력해주세요)</span></label>
-            <input id="email" type="email" placeholder="example@email.com" required />
 
             <label for="password">비밀번호 <span class="required">*</span></label>
             <input id="password" type="password" placeholder="6자 이상" required minlength="6" />
@@ -49,17 +98,14 @@
             <label for="password2">비밀번호 확인 <span class="required">*</span></label>
             <input id="password2" type="password" required minlength="6" />
 
-            <label for="birthdate">생년월일 <span class="required">*</span> <span class="hint-inline">(비밀번호를 잊었을 때 본인확인용으로 사용돼요)</span></label>
-            <input id="birthdate" type="date" required />
-
             <label for="bio">자기소개</label>
             <textarea id="bio" rows="3" placeholder="어떤 요리를 좋아하는지 소개해주세요."></textarea>
           </section>
 
-          <div id="form-message" class="form-message" role="status"></div>
+          <div id="step3-message" class="form-message" role="status"></div>
 
           <div class="form-actions">
-            <button type="submit" class="button button-primary" id="submit-button">회원가입 <span>→</span></button>
+            <button type="submit" class="button button-primary" id="step3-submit">회원가입 완료 <span>→</span></button>
           </div>
         </form>
 
