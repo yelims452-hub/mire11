@@ -7,11 +7,10 @@ function escapeHtml(str) {
 }
 
 function rankItemTemplate(r, i) {
-  const img = r.image || (r.media && r.media[0]) || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=300&q=80';
   return `
     <a class="rank-item" href="recipe.html?id=${encodeURIComponent(r.id)}">
       <span class="rank-num">${i + 1}</span>
-      <img class="rank-thumb" src="${img}" alt="${escapeHtml(r.recipe_name)}" loading="lazy" />
+      ${window.recipeThumbHtml(r, { alt: escapeHtml(r.recipe_name), extraClass: 'rank-thumb' })}
       <div class="rank-info">
         <h3>${escapeHtml(r.recipe_name)}</h3>
         <span>${(r.category || '').toUpperCase()} · by. ${escapeHtml(r.author || '익명의 요리사')}</span>

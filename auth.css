@@ -11,7 +11,7 @@
 .avatar-upload:hover .avatar-upload-hint{opacity:1}
 .my-recipe-list{display:flex;flex-direction:column;gap:12px}
 .my-recipe-item{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;border:1px solid var(--line);padding:10px 14px}
-.my-recipe-item img{width:56px;height:42px;object-fit:cover;background:var(--paper)}
+.my-recipe-item img,.my-recipe-item .thumb-placeholder{width:56px;height:42px;object-fit:cover;background:var(--paper)}
 .my-recipe-info h3{font:400 14px 'DM Serif Display',serif;margin:0 0 3px}
 .my-recipe-info span{font-size:11px;color:var(--orange);font-weight:700}
 .my-recipe-actions{display:flex;gap:6px}

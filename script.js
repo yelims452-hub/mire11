@@ -25,7 +25,7 @@ async function loadHomeRecipes() {
     }
     grid.innerHTML = recipes.slice(0, 3).map((r, i) => `
       <a class="recipe-card${i === 0 ? ' featured-card' : ''}" href="${r.id ? `recipe.html?id=${encodeURIComponent(r.id)}` : 'feed.html'}">
-        <img src="${r.image || (r.media && r.media[0]) || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=900&q=85'}" alt="${r.recipe_name}" loading="lazy" />
+        ${window.recipeThumbHtml(r, { alt: r.recipe_name })}
         <div class="card-body">
           <p>${(r.category || '').toUpperCase()}${r.duration ? ' · ' + r.duration : ''}</p>
           <h3>${r.recipe_name}</h3>

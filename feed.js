@@ -10,10 +10,9 @@ function escapeHtml(str) {
 }
 
 function cardTemplate(r) {
-  const img = r.image || (r.media && r.media[0]) || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=900&q=85';
   return `
     <a class="feed-card" href="recipe.html?id=${encodeURIComponent(r.id)}">
-      <img src="${img}" alt="${escapeHtml(r.recipe_name)}" loading="lazy" />
+      ${window.recipeThumbHtml(r, { alt: escapeHtml(r.recipe_name) })}
       <div class="fc-body">
         <span class="fc-cat">${(r.category || '').toUpperCase()}${r.duration ? ' · ' + r.duration : ''}</span>
         <h3>${escapeHtml(r.recipe_name)}</h3>

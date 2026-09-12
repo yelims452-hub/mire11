@@ -99,10 +99,9 @@ function renderProfile({ profile }) {
 }
 
 function myRecipeItemTemplate(r) {
-  const img = r.image || (r.media && r.media[0]) || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=200&q=80';
   return `
     <div class="my-recipe-item">
-      <img src="${img}" alt="${escapeHtml(r.recipe_name)}" />
+      ${window.recipeThumbHtml(r, { alt: escapeHtml(r.recipe_name) })}
       <div class="my-recipe-info">
         <h3>${escapeHtml(r.recipe_name)}${r.hidden ? ' <span class="rd-hidden-badge">비공개</span>' : ''}</h3>
         <span>♥ ${r.likes?.[0]?.count ?? 0}</span>

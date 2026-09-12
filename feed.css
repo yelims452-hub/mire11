@@ -8,7 +8,7 @@
 .feed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .feed-card{background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;text-decoration:none;color:var(--ink);transition:transform .2s,box-shadow .2s}
 .feed-card:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(23,58,53,.1)}
-.feed-card img{width:100%;height:190px;object-fit:cover;background:var(--paper)}
+.feed-card img,.feed-card .thumb-placeholder{width:100%;height:190px;object-fit:cover;background:var(--paper)}
 .feed-card .fc-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:6px}
 .feed-card .fc-cat{font:700 9px Manrope,sans-serif;letter-spacing:.6px;color:var(--orange)}
 .feed-card h3{font:400 19px 'DM Serif Display',serif;letter-spacing:-.4px;margin:0}
@@ -65,3 +65,7 @@
 .comment-empty{color:var(--muted);font-size:12.5px}
 .comment-delete-btn{border:0;background:none;color:var(--orange);font:700 10.5px Manrope,sans-serif;cursor:pointer;margin-top:4px;padding:0}
 .comment-delete-btn:hover{text-decoration:underline}
+
+/* 사진/영상이 없는 레시피용 공통 플레이스홀더 */
+.thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--paper),var(--lime) 140%);color:var(--orange)}
+.thumb-placeholder span{font-size:28px;opacity:.55}
