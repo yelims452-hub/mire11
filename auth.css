@@ -22,3 +22,15 @@
 .profile-view dt{color:var(--muted);font-weight:600}
 .profile-view dd{margin:0}
 .profile-edit-toggle{align-self:flex-start}
+
+.signup-steps{display:flex;gap:10px;margin:4px 0 22px;flex-wrap:wrap}
+.signup-step{display:flex;align-items:center;gap:6px;font:700 11px Manrope,sans-serif;color:var(--muted);letter-spacing:.2px}
+.signup-step i{display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--paper);border:1px solid var(--line);font-style:normal;font-size:11px;color:var(--muted)}
+.signup-step.is-active{color:var(--ink)}
+.signup-step.is-active i{background:var(--orange);border-color:var(--orange);color:#fff}
+.signup-step.is-done{color:var(--ink)}
+.signup-step.is-done i{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.otp-input-row{display:flex;gap:8px;align-items:stretch}
+.otp-input-row input{flex:1}
+.otp-input-row button{white-space:nowrap;flex-shrink:0}
