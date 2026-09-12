@@ -1,5 +1,5 @@
 // Vercel Serverless Function
-// POST { userId, username, email, birthdate, bio } -> profiles row를 service_role 권한으로 생성한다.
+// POST { userId, username, email, birthdate, bio, name } -> profiles row를 service_role 권한으로 생성한다.
 //
 // 배경: 이 프로젝트는 Supabase Auth의 "Confirm email" 옵션이 켜져 있어,
 // supabase.auth.signUp() 직후에는 로그인 세션이 없다(이메일 인증 전까지 auth.uid()가 없음).
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST만 지원해요.' });
 
-  const { userId, username, email, birthdate, bio } = req.body || {};
+  const { userId, username, email, birthdate, bio, name } = req.body || {};
   if (!userId || !username || !email || !birthdate) {
     return res.status(400).json({ error: 'userId, username, email, birthdate가 모두 필요해요.' });
   }
@@ -65,6 +65,7 @@ export default async function handler(req, res) {
         email,
         birthdate,
         bio: bio || null,
+        name: name || null, // 실명. 신원 확인/관리 목적으로만 저장하며 프로필 화면에는 노출하지 않는다.
       }),
     });
 
